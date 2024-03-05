@@ -1,19 +1,22 @@
 "use client"
 import Link from "next/link";
-import { signInHelper } from "@/components/helpers/superbaseHelperfunctions";
-import { BallTriangle } from "react-loader-spinner";
+import { signUpHelper } from "@/components/helpers/superbaseHelperfunctions";
 import { useFormState, useFormStatus } from "react-dom";
+import { BallTriangle } from "react-loader-spinner";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 
-export default function Login({ searchParams }: { searchParams: { message: string };}) {
+export default function Signup({
+  searchParams,
+}: {
+  searchParams: { message: string };
+}) {
   const initialState = {
     message: "",
     data: {}
   };
-  const [ state, formAction] = useFormState(signInHelper, initialState );
-
-  const SignInButton = () => {
+  const [ state, formAction] = useFormState(signUpHelper, initialState );
+  const SignUpButton = () => {
     const { pending } = useFormStatus();
     if (pending) {
       return (
@@ -32,15 +35,14 @@ export default function Login({ searchParams }: { searchParams: { message: strin
     } else {
       return (
         <button className="bg-green-700 hover:bg-green-400 rounded-md px-4 py-2 text-foreground mb-2">
-          Sign In
+          Sign Up
         </button>
       );
     }
   };
-
   useEffect(() => {
     if (state?.message === "Successful") {
-      redirect("/dashboard/requests");
+      redirect("/login");
     }
   }, [state])
   return (
@@ -70,13 +72,23 @@ export default function Login({ searchParams }: { searchParams: { message: strin
         className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
         action={formAction}
       >
-        
+        <label className="text-md" htmlFor="display_name">
+          Fullname
+        </label>
+        <input
+          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          name="display_name"
+          type="text"
+          placeholder="fullname"
+          required
+        />
         <label className="text-md" htmlFor="email">
           Email
         </label>
         <input
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
           name="email"
+          type="email"
           placeholder="you@example.com"
           required
         />
@@ -90,11 +102,11 @@ export default function Login({ searchParams }: { searchParams: { message: strin
           placeholder="••••••••"
           required
         />
-        <SignInButton/>
-        <Link href={"/signup"}
+        <SignUpButton/>
+        <Link href={"/login"}
           className="border border-foreground/20 text-center hover:bg-green-800 hover:text-white rounded-md px-4 py-2 text-foreground mb-2"
         >
-          Sign Up
+          Login
         </Link>
         {state?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
